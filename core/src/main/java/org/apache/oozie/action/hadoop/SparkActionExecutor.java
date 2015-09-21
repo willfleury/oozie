@@ -81,9 +81,13 @@ public class SparkActionExecutor extends JavaActionExecutor {
                 sparkOptsSb.append("--conf ").append(entry.getKey()).append("=").append(entry.getValue()).append(" ");
             }
         }
-        String sparkOpts = actionXml.getChildTextTrim("spark-opts", ns);
-        if (sparkOpts != null) {
-            sparkOptsSb.append(sparkOpts);
+        String sparkOpt = actionXml.getChildTextTrim("spark-opts", ns);
+        if (sparkOpt != null) {
+            sparkOptsSb.append(sparkOpt);
+        }
+        List<Element> sparkOpts = actionXml.getChildren("spark-opt", ns);
+        for (Element opt: sparkOpts) {
+            sparkOptsSb.append(" ").append(opt.getTextTrim());
         }
         if (sparkOptsSb.length() > 0) {
             actionConf.set(SPARK_OPTS, sparkOptsSb.toString().trim());
